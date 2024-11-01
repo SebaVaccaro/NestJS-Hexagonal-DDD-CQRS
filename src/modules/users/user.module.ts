@@ -4,6 +4,8 @@ import { Module } from '@nestjs/common';
 import { UserController } from './presentation/controllers/User.controller';
 import { UserService } from './infrastructure/services/User.service';
 import { InMemoryUserRepository } from './infrastructure/persistence/UserRepository';
+import { BcryptHashingService } from './infrastructure/hashing/bcrypt.hashing.service';
+
 
 @Module({
   controllers: [UserController],
@@ -12,6 +14,10 @@ import { InMemoryUserRepository } from './infrastructure/persistence/UserReposit
     {
       provide: 'UserRepository',
       useClass: InMemoryUserRepository,
+    },
+    { 
+      provide: 'HashingService',
+      useClass: BcryptHashingService,
     },
   ],
   exports: [UserService], // Exporta el servicio si lo necesitas en otros módulos
