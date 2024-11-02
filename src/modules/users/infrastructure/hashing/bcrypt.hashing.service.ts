@@ -8,7 +8,10 @@ export class BcryptHashingService implements HashingService {
         return hash
     }
     async compare(password: string, hash: string): Promise<boolean> {
+        console.log(password)
+        console.log(hash)
         const match = await bcrypt.compare(password, hash)
+        console.log(match)
         return match
     }
 }

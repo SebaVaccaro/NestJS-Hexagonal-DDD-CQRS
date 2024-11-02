@@ -2,7 +2,7 @@
 
 import { Module } from '@nestjs/common';
 import { UserController } from './presentation/controllers/User.controller';
-import { UserService } from './infrastructure/services/User.service';
+import { UserService } from './application/services/User.service';
 import { InMemoryUserRepository } from './infrastructure/persistence/UserRepository';
 import { BcryptHashingService } from './infrastructure/hashing/bcrypt.hashing.service';
 

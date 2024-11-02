@@ -5,4 +5,5 @@ export interface UserRepository{
     deleteUser(id: string): string
     getUsers(): User[]
     getUserById(id:string): User | undefined
+    getUserByEmail(email: string): User
 }
