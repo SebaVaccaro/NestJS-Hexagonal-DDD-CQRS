@@ -13,7 +13,7 @@ import { UserLoginDto } from '../../presentation/dtos/userLogin.dto';
 export class UserService {
   constructor(@Inject('UserRepository') private readonly userRepository: UserRepository,@Inject('HashingService') private readonly hashingService: HashingService) {}
   
-  async createUser(createUserDto: CreateUserDto):Promise<string> {
+  async createUser(createUserDto: CreateUserDto):Promise<User> {
     const password = await this.hashingService.hash(createUserDto.password)
     const user = new User(createUserDto.userId, createUserDto.username, createUserDto.email, password);
     return this.userRepository.addUser(user);
@@ -28,11 +28,12 @@ export class UserService {
     const user = this.userRepository.getUserByEmail(GetUserByEmailDto.email)
     return user
   }
-  async userLogin(userLoginDto: UserLoginDto): Promise<boolean>{
+  async userLogin(userLoginDto: UserLoginDto): Promise<User |boolean>{
     const getUserByEmailDto = new GetUserByEmailDto()
     getUserByEmailDto.email = userLoginDto.email
     const user = this.getUserByEmail(getUserByEmailDto)
     const match = await this.hashingService.compare(userLoginDto.password, user.password)
-    return match
+    if(!match)return false
+    return user
   }
 }

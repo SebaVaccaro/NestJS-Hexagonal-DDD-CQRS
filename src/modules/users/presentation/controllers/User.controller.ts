@@ -5,6 +5,7 @@ import { UserService } from '../../application/services/User.service';
 import { CreateUserDto } from '../dtos/createUser.dto';
 import { GetUserByIdDto } from '../dtos/getUserById.dto';
 import { UserLoginDto } from '../dtos/userLogin.dto';
+import { User } from '../../domain/entities/User.entities';
 
 @Controller('user')
 export class UserController {
@@ -20,12 +21,17 @@ export class UserController {
   }
   @Post()
   @UsePipes(new ValidationPipe({whitelist: true}))
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<string> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.userService.createUser(createUserDto);
   }
   @Post('login')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  async userLogin(@Body() userLoginDto: UserLoginDto): Promise<boolean>{
+  async userLogin(@Body() userLoginDto: UserLoginDto): Promise<User | boolean>{
     return await this.userService.userLogin(userLoginDto)
+  }
+  @Post('register')
+  @UsePipes(new ValidationPipe({whitelist: true}))
+  async userRegister(@Body() userData: CreateUserDto): Promise<User>{
+    return await this.userService.createUser(userData)
   }
 }
