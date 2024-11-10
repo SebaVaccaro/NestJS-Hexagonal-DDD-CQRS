@@ -11,11 +11,11 @@ export class AuthService{
         @Inject('HashingService') private readonly hashing: HashingService,
         private readonly userService: UserService
       ){}
-    signIn(userloginDto: UserLoginDto): User | null{
+    async signIn(userloginDto: UserLoginDto): Promise<User | null> {
         const emailDto = new GetUserByEmailDto()
         emailDto.email = userloginDto.email
         const user = this.userService.getUserByEmail(emailDto)
-        const matchPassword = this.hashing.compare( user.password, userloginDto.password)
+        const matchPassword = await this.hashing.compare( userloginDto.password, user?.password)
         if(!matchPassword) return null
         return user
     }

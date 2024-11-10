@@ -1,4 +1,3 @@
-// src/modules/users/user.module.ts
 
 import { Module } from '@nestjs/common';
 import { UserController } from './presentation/controllers/User.controller';
@@ -20,6 +19,10 @@ import { BcryptHashingService } from './infrastructure/hashing/bcrypt.hashing.se
       useClass: BcryptHashingService,
     },
   ],
-  exports: [UserService], // Exporta el servicio si lo necesitas en otros módulos
+  exports: [
+    UserService,
+    'UserRepository',
+    'HashingService'
+  ],
 })
 export class UserModule {}
