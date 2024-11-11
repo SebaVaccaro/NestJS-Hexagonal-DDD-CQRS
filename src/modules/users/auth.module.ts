@@ -4,6 +4,7 @@ import { AuthService } from "./application/services/Auth.service";
 import { UserService } from "./application/services/User.service";
 import { UserModule } from "./user.module";
 import { BcryptHashingService } from "./infrastructure/hashing/bcrypt.hashing.service";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
     controllers: [AuthController],
@@ -15,7 +16,12 @@ import { BcryptHashingService } from "./infrastructure/hashing/bcrypt.hashing.se
             useClass: BcryptHashingService
         }
     ],
-    imports: [UserModule],
+    imports: [UserModule,
+        JwtModule.register({
+            global: true,
+            secret: 'asdasd',
+        })
+    ],
     exports: [AuthService]
 })
 export class AuthModule{}

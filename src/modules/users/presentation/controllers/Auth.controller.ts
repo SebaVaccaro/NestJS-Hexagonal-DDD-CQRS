@@ -1,7 +1,7 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Post, Res, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserLoginDto } from "../dtos/userLogin.dto";
-import { User } from "../../domain/entities/User.entities";
 import { AuthService } from "../../application/services/Auth.service";
+import { Response } from "express";
 
 @Controller('auth')
 export class AuthController{
@@ -11,7 +11,11 @@ export class AuthController{
     
     @Post('login')
     @UsePipes(new ValidationPipe({whitelist: true}))
-    async userLogin(@Body() userDataLogin: UserLoginDto): Promise<User | null>{
-      return this.authService.signIn(userDataLogin)
+    async userLogin(@Body() userDataLogin: UserLoginDto, @Res() response: Response):Promise<void>{
+      const { access_token, user } = await this.authService.signIn(userDataLogin)
+      response.cookie('acces_token', access_token, {
+        httpOnly: true
+      })
+      response.send(user)
     }
 }
