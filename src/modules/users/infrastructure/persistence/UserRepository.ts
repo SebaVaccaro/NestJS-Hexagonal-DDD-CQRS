@@ -1,11 +1,13 @@
 import { User } from "../../domain/entities/user.entities";
 import { UserRepository } from "../../domain/repositories/UserRepository";
+import { GetUserByEmailDto } from "../../presentation/dtos/getUserByEmail.dto";
+import { GetUserByIdDto } from "../../presentation/dtos/getUserById.dto";
 
 export class InMemoryUserRepository implements UserRepository{
     Users : User[] = []
-    addUser(user: User): string {
+    addUser(user: User): User {
         this.Users.push(user)
-        return "user create succesfull"
+        return user
     }
     deleteUser(id: string): string {
         const newUsers = this.Users.filter(u=> u.userId !== id)

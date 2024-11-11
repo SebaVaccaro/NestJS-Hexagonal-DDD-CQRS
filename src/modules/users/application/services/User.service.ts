@@ -11,7 +11,10 @@ import { UserLoginDto } from '../../presentation/dtos/userLogin.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject('UserRepository') private readonly userRepository: UserRepository,@Inject('HashingService') private readonly hashingService: HashingService) {}
+  constructor(
+    @Inject('UserRepository') private readonly userRepository: UserRepository,
+    @Inject('HashingService') private readonly hashingService: HashingService
+  ) {}
   
   async createUser(createUserDto: CreateUserDto):Promise<User> {
     const password = await this.hashingService.hash(createUserDto.password)
@@ -21,12 +24,11 @@ export class UserService {
   getUsers(): User[]{
     return this.userRepository.getUsers()
   }
-  getUserById(getUserByIdDto: GetUserByIdDto): User{
-    return this.userRepository.getUserById(getUserByIdDto.userId)
+  getUserById(id:GetUserByIdDto): User{
+    return this.userRepository.getUserById(id.userId)
   }
   getUserByEmail(GetUserByEmailDto: GetUserByEmailDto): User{
-    const user = this.userRepository.getUserByEmail(GetUserByEmailDto.email)
-    return user
+    return this.userRepository.getUserByEmail(GetUserByEmailDto.email)
   }
   async userLogin(userLoginDto: UserLoginDto): Promise<User |boolean>{
     const getUserByEmailDto = new GetUserByEmailDto()
