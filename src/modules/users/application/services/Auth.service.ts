@@ -16,12 +16,12 @@ export class AuthService{
     async signIn(userloginDto: UserLoginDto): Promise<{access_token: string, user: User}> {
         const emailDto = new GetUserByEmailDto()
         emailDto.email = userloginDto.email
-        const user = this.userService.getUserByEmail(emailDto)
+        const user = await this.userService.getUserByEmail(emailDto)
         
         const matchPassword = await this.hashing.compare( userloginDto.password, user?.password)
         if(!matchPassword) return null
         
-        const payload = { userId: user.userId, username: user.username}
+        const payload = { userId: user._id, username: user.username}
         return{
             access_token: await this.jwtService.signAsync(payload),
             user

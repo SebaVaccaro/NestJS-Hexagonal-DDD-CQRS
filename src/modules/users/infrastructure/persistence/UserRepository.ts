@@ -1,28 +1,28 @@
+import { InjectModel } from "@nestjs/mongoose";
 import { User } from "../../domain/entities/user.entities";
 import { UserRepository } from "../../domain/repositories/UserRepository";
-import { GetUserByEmailDto } from "../../presentation/dtos/getUserByEmail.dto";
-import { GetUserByIdDto } from "../../presentation/dtos/getUserById.dto";
+import { Model } from "mongoose";
 
 export class InMemoryUserRepository implements UserRepository{
+    constructor(@InjectModel(User.name) private userModel: Model<User>){}
     Users : User[] = []
-    addUser(user: User): User {
-        this.Users.push(user)
-        return user
+    async addUser(user: User): Promise<User | null> {
+        const newUser = new this.userModel(user)
+        return await newUser.save()
     }
-    deleteUser(id: string): string {
-        const newUsers = this.Users.filter(u=> u.userId !== id)
-        this.Users = newUsers
-        return "delete user succesfull"
+    async deleteUser(id: string): Promise<User | null> {
+        const res = await this.userModel.findByIdAndDelete(id)
+        return res
     }
     getUsers(): User[] {
         return this.Users
     }
-    getUserById(id: string): User | undefined {
-        const user = this.Users.find(u=> u.userId === id)
+    async getUserById(id: string): Promise<User | null> {
+        const user = await this.userModel.findById(id)
         return user
     }
-    getUserByEmail(email: string): User {
-        const user = this.Users.find(u=> u.email === email)
+    async getUserByEmail(email: string): Promise<User | null> {
+        const user = await this.userModel.findOne({email})
         return user
     }
 }

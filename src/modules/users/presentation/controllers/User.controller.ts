@@ -4,22 +4,27 @@ import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@n
 import { UserService } from '../../application/services/User.service';
 import { CreateUserDto } from '../dtos/createUser.dto';
 import { GetUserByIdDto } from '../dtos/getUserById.dto';
-import { UserLoginDto } from '../dtos/userLogin.dto';
 import { User } from '../../domain/entities/User.entities';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
-  @Post('register')
+  @Post('/register')
   @UsePipes(new ValidationPipe({whitelist: true}))
   async userRegister(@Body() userData: CreateUserDto): Promise<User>{
     return await this.userService.createUser(userData)
   }
-  
-  @Post('login')
+
+  @Get('/publicdata/:userId')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  async userLogin(@Body() userLoginDto: UserLoginDto): Promise<User | boolean>{
-    return await this.userService.userLogin(userLoginDto)
+  getPublicData(@Param() id:GetUserByIdDto){
+    return this.userService.getPublicData(id)
+  }
+  
+  @Get('/privatedata/:userId')
+  @UsePipes(new ValidationPipe({whitelist: true}))
+  getPrivateData(@Param() id:GetUserByIdDto){
+    return this.userService.getPrivateData(id)
   }
   
   @Get()

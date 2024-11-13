@@ -11,7 +11,7 @@ export class AuthController{
     
     @Post('login')
     @UsePipes(new ValidationPipe({whitelist: true}))
-    async userLogin(@Body() userDataLogin: UserLoginDto, @Res() response: Response):Promise<void>{
+    async userLogin(@Body() userDataLogin: UserLoginDto, @Res() response: Response){
       const { access_token, user } = await this.authService.signIn(userDataLogin)
       response.cookie('acces_token', access_token, {
         httpOnly: true

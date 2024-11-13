@@ -13,4 +13,13 @@ export class CreateUserDto{
     @IsString()
     @IsNotEmpty()
     readonly password: string
+    @IsString()
+    @IsNotEmpty()
+    readonly phonenumber: string
+    @IsString()
+    @IsNotEmpty()
+    readonly age: string
+    @IsString()
+    @IsNotEmpty()
+    readonly gender: string
 }

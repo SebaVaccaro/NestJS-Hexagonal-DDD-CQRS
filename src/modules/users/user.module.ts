@@ -4,6 +4,9 @@ import { UserController } from './presentation/controllers/User.controller';
 import { UserService } from './application/services/User.service';
 import { InMemoryUserRepository } from './infrastructure/persistence/UserRepository';
 import { BcryptHashingService } from './infrastructure/hashing/bcrypt.hashing.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User } from './domain/entities/User.entities';
+import { UserSchema } from './infrastructure/db/UserSchema';
 
 
 @Module({
@@ -19,6 +22,7 @@ import { BcryptHashingService } from './infrastructure/hashing/bcrypt.hashing.se
       useClass: BcryptHashingService,
     },
   ],
+  imports:[MongooseModule.forFeature([{name: User.name, schema: UserSchema}])],
   exports: [
     UserService,
     'UserRepository',
