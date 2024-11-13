@@ -2,11 +2,11 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './presentation/controllers/User.controller';
 import { UserService } from './application/services/User.service';
-import { InMemoryUserRepository } from './infrastructure/persistence/UserRepository';
 import { BcryptHashingService } from './infrastructure/hashing/bcrypt.hashing.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User } from './domain/entities/User.entities';
 import { UserSchema } from './infrastructure/db/UserSchema';
+import { DataBaseUserRepository } from './infrastructure/db/DataBaseUserRepository';
 
 
 @Module({
@@ -15,7 +15,7 @@ import { UserSchema } from './infrastructure/db/UserSchema';
     UserService,
     {
       provide: 'UserRepository',
-      useClass: InMemoryUserRepository,
+      useClass: DataBaseUserRepository,
     },
     { 
       provide: 'HashingService',

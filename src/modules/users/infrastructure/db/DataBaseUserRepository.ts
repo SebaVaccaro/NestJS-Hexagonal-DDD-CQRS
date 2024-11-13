@@ -3,7 +3,7 @@ import { User } from "../../domain/entities/user.entities";
 import { UserRepository } from "../../domain/repositories/UserRepository";
 import { Model } from "mongoose";
 
-export class InMemoryUserRepository implements UserRepository{
+export class DataBaseUserRepository implements UserRepository{
     constructor(@InjectModel(User.name) private userModel: Model<User>){}
     Users : User[] = []
     async addUser(user: User): Promise<User | null> {

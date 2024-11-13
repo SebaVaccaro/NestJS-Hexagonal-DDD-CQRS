@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class GetUserByIdDto{
+export class UserIdDto{
     @IsString()
     @IsNotEmpty()
     readonly userId: string

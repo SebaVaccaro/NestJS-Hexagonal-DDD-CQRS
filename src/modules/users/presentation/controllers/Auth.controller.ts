@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res, UsePipes, ValidationPipe } from "@nestjs/common";
-import { UserLoginDto } from "../dtos/userLogin.dto";
+import { UserLoginDto } from "../dtos/UserLogin.dto";
 import { AuthService } from "../../application/services/Auth.service";
 import { Response } from "express";
 

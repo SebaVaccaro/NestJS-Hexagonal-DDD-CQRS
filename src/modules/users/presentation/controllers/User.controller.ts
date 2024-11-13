@@ -1,27 +1,27 @@
 import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from '../../application/services/User.service';
-import { CreateUserDto } from '../dtos/createUser.dto';
-import { GetUserByIdDto } from '../dtos/getUserById.dto';
 import { User } from '../../domain/entities/User.entities';
+import { UserDto } from '../dtos/User.dto';
+import { UserIdDto } from '../dtos/UserId.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
   @Post('/register')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  async userRegister(@Body() userData: CreateUserDto): Promise<User>{
+  async userRegister(@Body() userData: UserDto): Promise<User>{
     return await this.userService.createUser(userData)
   }
 
   @Get('/publicdata/:userId')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  getPublicData(@Param() id:GetUserByIdDto){
+  getPublicData(@Param() id:UserIdDto){
     return this.userService.getPublicData(id)
   }
   
   @Get('/privatedata/:userId')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  getPrivateData(@Param() id:GetUserByIdDto){
+  getPrivateData(@Param() id:UserIdDto){
     return this.userService.getPrivateData(id)
   }
   
@@ -32,7 +32,7 @@ export class UserController {
   
   @Get('/:userId')
   @UsePipes(new ValidationPipe({whitelist:true}))
-  getUserById(@Param() id:GetUserByIdDto){
+  getUserById(@Param() id:UserIdDto){
     return this.userService.getUserById(id)
   }
   

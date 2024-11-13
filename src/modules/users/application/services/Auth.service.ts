@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { UserLoginDto } from "../../presentation/dtos/userLogin.dto";
+import { UserLoginDto } from "../../presentation/dtos/UserLogin.dto";
 import { HashingService } from "../../domain/interface/hashing.service.interface";
-import { GetUserByEmailDto } from "../../presentation/dtos/getUserByEmail.dto";
 import { UserService } from "./User.service";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "../../domain/entities/User.entities";
+import { UserEmailDto } from "../../presentation/dtos/UserEmail.dto";
 
 @Injectable()
 export class AuthService{
@@ -14,7 +14,7 @@ export class AuthService{
         private readonly jwtService: JwtService
       ){}
     async signIn(userloginDto: UserLoginDto): Promise<{access_token: string, user: User}> {
-        const emailDto = new GetUserByEmailDto()
+        const emailDto = new UserEmailDto()
         emailDto.email = userloginDto.email
         const user = await this.userService.getUserByEmail(emailDto)
         
