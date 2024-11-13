@@ -1,5 +1,3 @@
-// src/modules/users/presentation/controllers/User.controller.ts
-
 import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from '../../application/services/User.service';
 import { CreateUserDto } from '../dtos/createUser.dto';

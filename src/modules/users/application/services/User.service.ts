@@ -1,5 +1,3 @@
-// src/modules/users/infrastructure/services/User.service.ts
-
 import { Injectable, Inject } from '@nestjs/common';
 import { UserRepository } from '../../domain/repositories/UserRepository';
 import { User } from '../../domain/entities/User.entities';
