@@ -1,9 +1,17 @@
-import { User } from "../entities/User.entities";
+import { UserS } from "../../infrastructure/db/UserSchema";
 
 export interface UserRepository{
-    addUser(user: User): Promise<User>
-    deleteUser(id: string): Promise<User | null>
-    getUsers(): User[]
-    getUserById(id:string): Promise<User|null>
-    getUserByEmail(email: string):Promise<User|null>
+    addUser(user: {
+        _id: string;
+        username: string;
+        email: string;
+        password: string;
+        phonenumber: string;
+        age: string;
+        gender: string;
+      }): Promise<UserS | null>
+    deleteUser(id: string): Promise<UserS | null>
+    getUsers(): Promise<UserS[]>
+    getUserById(id:string): Promise<UserS|null>
+    getUserByEmail(email: string):Promise<UserS|null>
 }
