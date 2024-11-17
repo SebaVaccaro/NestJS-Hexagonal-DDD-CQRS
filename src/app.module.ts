@@ -8,9 +8,11 @@ import { AppController } from './modules/infratructure/app.controller';
 import { AppService } from './modules/application/app.service';
 import { UserService } from './modules/users/application/services/User.service';
 import { PublicationService } from './modules/publications/application/PublicationService';
+import { HomeController } from './home.controller';
 
 @Module({
   controllers:[
+    HomeController,
     AppController
   ],
   providers:[
