@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { UserLoginDto } from "../../presentation/dtos/UserLogin.dto";
 import { HashingService } from "../../domain/interface/hashing.service.interface";
 import { UserService } from "./User.service";
 import { JwtService } from "@nestjs/jwt";
 import { UserResDto } from "../../presentation/dtos/UserRes.dto";
+import { LoginInterface } from "../../domain/interface/Login.interface";
 
 @Injectable()
 export class AuthService{
@@ -13,7 +13,7 @@ export class AuthService{
         private readonly jwtService: JwtService
       ){}
     
-      async signIn(loginData: UserLoginDto): Promise<{access_token: string, user: UserResDto}> {
+      async signIn(loginData: LoginInterface): Promise<{access_token: string, user: UserResDto}> {
         
         if(!loginData.email) throw new HttpException("email is required", HttpStatus.BAD_REQUEST)
 

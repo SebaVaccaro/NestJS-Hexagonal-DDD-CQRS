@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res, UsePipes, ValidationPipe } from "@nestjs/common";
-import { UserLoginDto } from "../dtos/UserLogin.dto";
 import { AuthService } from "../../application/services/Auth.service";
 import { Response } from "express";
+import { LoginDto } from "../dtos/UserLogin.dto";
 
 @Controller('auth')
 export class AuthController{
@@ -11,7 +11,7 @@ export class AuthController{
     
     @Post('login')
     @UsePipes(new ValidationPipe({whitelist: true}))
-    async userLogin(@Body() dataLogin: UserLoginDto, @Res() response: Response){
+    async userLogin(@Body() dataLogin: LoginDto, @Res() response: Response){
       
       const { access_token, user } = await this.authService.signIn(dataLogin)
       
