@@ -19,6 +19,12 @@ import { UuidService } from "./infrastructure/uuid/UuidService";
         }
     ],
     imports:[MongooseModule.forFeature([{name: PublicationS.name, schema: PublicationSchema}])],
-    controllers:[PublicationController]
+    controllers:[PublicationController],
+    exports:[
+        PublicationService,
+        'PublicationRepository',
+        'IdService'
+
+    ]
 })
 export class PublicationModule{}

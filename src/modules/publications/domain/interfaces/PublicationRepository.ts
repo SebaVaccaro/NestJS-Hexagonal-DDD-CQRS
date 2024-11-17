@@ -1,16 +1,10 @@
-import { PublicationS } from "../../infrastructure/db/PublicationSchema";
+import { Publication } from "../entities/Publication";
+import { NewPublicationI } from "./NewPublicationInterface";
 
 export interface PublicationRepository {
     createPublication(
-        publication: {
-            _id: string
-            description: string
-            privateData: string
-            userCreate: string
-            requests: string[]
-            matches: string[]
-        }
-    ): Promise<PublicationS | null>
-    getPublicationById(id:string): Promise<PublicationS | null>
-    getPublications(): Promise<PublicationS[] | null>
+        publication: NewPublicationI
+    ): Promise<Publication | null>
+    getPublicationById(id:string): Promise<Publication | null>
+    getPublications(): Promise<Publication[] | null>
 }
