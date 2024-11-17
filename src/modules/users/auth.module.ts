@@ -19,7 +19,7 @@ import { JwtModule } from "@nestjs/jwt";
     imports: [UserModule,
         JwtModule.register({
             global: true,
-            secret: 'asdasd',
+            secret: process.env.JWT_SECRET_KEY,
         })
     ],
     exports: [AuthService]
