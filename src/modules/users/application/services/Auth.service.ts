@@ -13,14 +13,14 @@ export class AuthService{
         private readonly jwtService: JwtService
       ){}
     
-      async signIn(userloginDto: UserLoginDto): Promise<{access_token: string, user: UserResDto}> {
+      async signIn(loginData: UserLoginDto): Promise<{access_token: string, user: UserResDto}> {
         
-        if(!userloginDto.email) throw new HttpException("email is required", HttpStatus.BAD_REQUEST)
+        if(!loginData.email) throw new HttpException("email is required", HttpStatus.BAD_REQUEST)
 
-        const user = await this.userService.getUserByEmail(userloginDto)
+        const user = await this.userService.getUserByEmail({email: loginData.email})
         if(!user)throw new HttpException("email unexistend", HttpStatus.NOT_FOUND)
         
-        const matchPassword = await this.hashing.compare( userloginDto.password, user?.password)
+        const matchPassword = await this.hashing.compare( loginData.password, user?.password)
         if(!matchPassword) throw new HttpException("invalid password", HttpStatus.FORBIDDEN)
         
         const payload = { userId: user._id, username: user.username}
