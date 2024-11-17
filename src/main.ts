@@ -8,7 +8,8 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
 })
+  const PORT = process.env.PORT || 3000
   app.use(cookieParser())
-  await app.listen(process.env.PORT || 3000, ()=>console.log("listen on port 3000"));
+  await app.listen(PORT, ()=>console.log("listen on port 3000"));
 }
 bootstrap();
