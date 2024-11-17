@@ -3,7 +3,7 @@ import { UserLoginDto } from "../../presentation/dtos/UserLogin.dto";
 import { HashingService } from "../../domain/interface/hashing.service.interface";
 import { UserService } from "./User.service";
 import { JwtService } from "@nestjs/jwt";
-import { UserS } from "../../infrastructure/db/UserSchema";
+import { UserResDto } from "../../presentation/dtos/UserRes.dto";
 
 @Injectable()
 export class AuthService{
@@ -13,7 +13,7 @@ export class AuthService{
         private readonly jwtService: JwtService
       ){}
     
-      async signIn(userloginDto: UserLoginDto): Promise<{access_token: string, user: UserS}> {
+      async signIn(userloginDto: UserLoginDto): Promise<{access_token: string, user: UserResDto}> {
         
         if(!userloginDto.email) throw new HttpException("email is required", HttpStatus.BAD_REQUEST)
 
@@ -26,9 +26,12 @@ export class AuthService{
         const payload = { userId: user._id, username: user.username}
         const access_token = await this.jwtService.signAsync(payload)
         
+
+        const userResDto = new UserResDto(user)
+        
         return{
             access_token,
-            user
+            user: userResDto
         }
     }
 }

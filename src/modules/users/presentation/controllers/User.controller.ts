@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from '../../application/services/User.service';
 import { UserDto } from '../dtos/User.dto';
 import { UserIdDto } from '../dtos/UserId.dto';
-import { UserS } from '../../infrastructure/db/UserSchema';
+import { UserResDto } from '../dtos/UserRes.dto';
 
 @Controller('user')
 export class UserController {
@@ -10,30 +10,30 @@ export class UserController {
   
   @Post('/register')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  async userRegister(@Body() userData: UserDto): Promise<UserS>{
+  async userRegister(@Body() userData: UserDto): Promise<UserResDto>{
     return await this.userService.createUser(userData)
   }
 
-  @Get('/publicdata/:userId')
+  @Get('/publicdata/:id')
   @UsePipes(new ValidationPipe({whitelist: true}))
   async getPublicData(@Param() id:UserIdDto){
     return await this.userService.getPublicData(id)
   }
   
-  @Get('/privatedata/:userId')
+  @Get('/privatedata/:id')
   @UsePipes(new ValidationPipe({whitelist: true}))
   async getPrivateData(@Param() id:UserIdDto){
     return await this.userService.getPrivateData(id)
   }
   
   @Get()
-  async getUsers(){
+  async getUsers(): Promise<UserResDto[]>{
     return await this.userService.getUsers()
   }
   
-  @Get('/:userId')
+  @Get('/:id')
   @UsePipes(new ValidationPipe({whitelist:true}))
-  async getUserById(@Param() id:UserIdDto){
+  async getUserById(@Param() id:UserIdDto): Promise<UserResDto>{
     return await this.userService.getUserById(id)
   }
   

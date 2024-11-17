@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './modules/users/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PublicationModule } from './modules/publications/publication.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UserModule,AuthModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/users')
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal:true
+    }),
+    UserModule,
+    AuthModule,
+    PublicationModule,
+    MongooseModule.forRoot(
+      process.env.URI
+    )
+  ]
 })
 export class AppModule {}
