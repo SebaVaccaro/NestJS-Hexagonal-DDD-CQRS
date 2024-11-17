@@ -3,13 +3,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": [],
-    "watchAssets": true
-  },
-  "project": {
-    "name": "97S"
-  },
-  "build": {
-    "outDir": "./dist"
+    "deleteOutDir": true
   }
 }
