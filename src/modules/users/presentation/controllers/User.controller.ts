@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from '../../application/services/User.service';
-import { UserDto } from '../dtos/User.dto';
 import { UserIdDto } from '../dtos/UserId.dto';
 import { UserResDto } from '../dtos/UserRes.dto';
+import { NewUserDto } from '../dtos/NewUser.dto';
 
 @Controller('user')
 export class UserController {
@@ -10,7 +10,7 @@ export class UserController {
   
   @Post('/register')
   @UsePipes(new ValidationPipe({whitelist: true}))
-  async userRegister(@Body() userData: UserDto): Promise<UserResDto>{
+  async userRegister(@Body() userData: NewUserDto): Promise<UserResDto>{
     return await this.userService.createUser(userData)
   }
 

@@ -1,13 +1,14 @@
 import { Inject } from "@nestjs/common";
 import { PublicationRepository } from "../domain/interfaces/PublicationRepository";
-import { IdService } from "../domain/interfaces/IdService";
 import { NewPublicationI } from "../domain/interfaces/NewPublicationInterface";
 import { Publication } from "../domain/entities/Publication";
+import { IdServiceI } from "../domain/interfaces/IdServiceI";
+import { IdI } from "../domain/interfaces/IdI";
 
 export class PublicationService{
     constructor(
         @Inject('PublicationRepository') private readonly publicationRespository: PublicationRepository,
-        @Inject('IdService') private readonly idService:IdService
+        @Inject('IdService') private readonly idService:IdServiceI
     ){}
 
     async createPublication(newPublication: NewPublicationI): Promise<Publication>{
@@ -16,6 +17,10 @@ export class PublicationService{
     }
 
     async getPublications(): Promise<Publication[] | null>{
-        return this.publicationRespository.getPublications()
+        return await this.publicationRespository.getPublications()
+    }
+
+    async getPublicationById( {id}:IdI): Promise<Publication | null>{
+        return await this.publicationRespository.getPublicationById(id)
     }
 }

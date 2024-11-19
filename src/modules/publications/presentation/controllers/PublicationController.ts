@@ -1,12 +1,17 @@
-import { Controller, Get} from "@nestjs/common";
+import { Controller, Get, Param} from "@nestjs/common";
 import { PublicationService } from "../../application/PublicationService";
-import { PublicationS } from "../../infrastructure/db/PublicationSchema";
+import { PublicationResDto } from "../dtos/PublicationResDto";
+import { IdI } from "../../domain/interfaces/IdI";
 
 @Controller('publication')
 export class PublicationController{
     constructor(private readonly publicationService: PublicationService){}
     @Get()
-    async getPublications(): Promise<PublicationS[] | null>{
-        return this.publicationService.getPublications()
+    async getPublications(): Promise<PublicationResDto[] | null>{
+        return await this.publicationService.getPublications()
+    }
+    @Get('/:id')
+    async getPublicationById(@Param() {id}: IdI): Promise<PublicationResDto>{
+        return await this.publicationService.getPublicationById({id})
     }
 }
