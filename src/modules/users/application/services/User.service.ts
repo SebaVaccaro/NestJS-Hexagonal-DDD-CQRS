@@ -7,6 +7,8 @@ import { IdInterface } from '../../domain/interface/IdInterface';
 import { EmailInterface } from '../../domain/interface/EmailInterface';
 import { User } from '../../domain/entities/User.entities';
 import { UserResDto } from '../../presentation/dtos/UserRes.dto';
+import { PublicDataDto } from '../../presentation/dtos/PublicData.dto';
+import { PrivateDataDto } from '../../presentation/dtos/PrivateDataDto';
 
 @Injectable()
 export class UserService {
@@ -25,9 +27,15 @@ export class UserService {
       password,
       phonenumber: data.phonenumber,
       age: data.age,
-      gender: data.gender
+      gender: data.gender,
+      myPublications: [],
+      myPublicationRequests: [],
+      myPublicationMatches: [],
+      myRequests: [],
+      myMatches: []
     };
     const user = await this.userRepository.addUser(newUser);
+    if(!user)return null
     return new UserResDto(user)
   }
   
@@ -56,12 +64,14 @@ export class UserService {
   
   async getPublicData({id}: IdInterface): Promise<{} | null>{
     const user = await this.userRepository.getUserById(id)
-    const publicData = user.getPublicData()
-    return publicData
+    const {username, age, gender} = user.getPublicData()
+    const publicDataDto = new PublicDataDto(username, age, gender)
+    return publicDataDto
   }
   async getPrivateData({id}: IdInterface): Promise<{} | null>{
     const user = await this.userRepository.getUserById(id)
-    const privateData = user.getPrivateData()
-    return privateData
+    const {email, phonenumber} = user.getPrivateData()
+    const privateDataDto = new PrivateDataDto(email, phonenumber)
+    return privateDataDto
   }
 }

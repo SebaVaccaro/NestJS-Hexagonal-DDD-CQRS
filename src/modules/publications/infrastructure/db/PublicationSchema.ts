@@ -8,13 +8,16 @@ export class PublicationS{
     _id: string
     
     @Prop({type:String})
+    createBy: string
+    
+    @Prop({type:String})
     description: string
+
+    @Prop({type: [String]})
+    publicData: string[]
     
-    @Prop({type:String})
-    privateData: string
-    
-    @Prop({type:String})
-    userCreate: string
+    @Prop({type:[String]})
+    privateData: string[]
     
     @Prop({ type: [String], required: true })
     requests: string[]

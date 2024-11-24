@@ -5,6 +5,7 @@ import { PublicationDB } from "./infrastructure/db/PublicationDB";
 import { PublicationService } from "./application/PublicationService";
 import { PublicationController } from "./presentation/controllers/PublicationController";
 import { UuidService } from "./infrastructure/uuid/UuidService";
+import { UserModule } from "../users/user.module";
 
 @Module({
     providers:[
@@ -18,7 +19,9 @@ import { UuidService } from "./infrastructure/uuid/UuidService";
             useClass: PublicationDB
         }
     ],
-    imports:[MongooseModule.forFeature([{name: PublicationS.name, schema: PublicationSchema}])],
+    imports:[MongooseModule.forFeature([{name: PublicationS.name, schema: PublicationSchema}]),
+        UserModule
+    ],
     controllers:[PublicationController],
     exports:[
         PublicationService,

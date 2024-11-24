@@ -1,10 +1,20 @@
-import { Document } from "mongoose"
+import { PublicationI } from "../interfaces/PublicationI"
 
-export class Publication extends Document{
+export class Publication {
     _id: string
-    userCreate: string
+    createBy: string
     description: string
-    privateData: string
+    publicData: string[]
+    privateData: string[]
     requests: string[]
     matches: string[]
+    constructor(publication: PublicationI){
+        this._id = publication._id
+        this.createBy = publication.createBy
+        this.description = publication.description
+        this.publicData = publication.publicData
+        this.privateData = publication.privateData
+        this.requests = publication.requests
+        this.matches = publication.matches
+    }
 }

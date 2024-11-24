@@ -1,33 +1,32 @@
-import { Document } from "mongoose"
+export class User {
+    constructor(
+        public _id: string,
+        public username: string,
+        public email: string,
+        public password: string,
+        public phonenumber: string,
+        public age: string,
+        public gender: string,
+        public myPublications: string[] = [],
+        public myPublicationRequests: string[] = [],
+        public myPublicationMatches: string[] = [],
+        public myRequests: string[] = [],
+        public myMatches: string[] = []
+    ) {}
 
-export class User extends Document{
-    _id: string
-    username: string
-    email: string
-    password: string
-    phonenumber: string
-    age: string
-    gender: string
-    constructor( username: string, email:string, password:string, phonenumber: string, age: string, gender: string){
-        super()
-        this.username = username
-        this.email = email
-        this.password = password
-        this.phonenumber= phonenumber
-        this.age = age
-        this.gender = gender
-    }
-    getPublicData(){
+    getPublicData() {
         return {
             username: this.username,
             age: this.age,
             gender: this.gender
-        }
+        };
     }
-    getPrivateData(){
-        return{
+
+    getPrivateData() {
+        return {
             email: this.email,
             phonenumber: this.phonenumber
-        }
+        };
     }
 }
+
