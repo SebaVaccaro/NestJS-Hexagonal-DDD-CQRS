@@ -1,11 +1,13 @@
+import { PrivateDataI } from "../interfaces/PrivateDataI"
 import { PublicationI } from "../interfaces/PublicationI"
+import { PublicDataI } from "../interfaces/PublicDataI"
 
 export class Publication {
     _id: string
     createBy: string
     description: string
-    publicData: string[]
-    privateData: string[]
+    publicData: PublicDataI
+    privateData: PrivateDataI
     requests: string[]
     matches: string[]
     constructor(publication: PublicationI){

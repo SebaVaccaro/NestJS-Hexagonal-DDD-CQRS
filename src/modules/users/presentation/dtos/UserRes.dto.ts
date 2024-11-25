@@ -19,10 +19,10 @@ export class UserResDto{
         this.phonenumber = user.phonenumber
         this.age = user.age
         this.gender = user.gender
-        this.myPublications = []
-        this.myPublicationRequests = []
-        this.myPublicationMatches = []
-        this.myRequests = []
-        this.myMatches = []
+        this.myPublications = user.myPublications
+        this.myPublicationRequests = user.myPublicationRequests
+        this.myPublicationMatches = user.myPublicationMatches
+        this.myRequests = user.myRequests
+        this.myMatches = user.myMatches
     }
 }

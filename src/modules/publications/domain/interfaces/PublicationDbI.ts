@@ -1,7 +1,7 @@
 import { PrivateDataI } from "./PrivateDataI"
 import { PublicDataI } from "./PublicDataI"
 
-export interface PublicationI{
+export interface PublicationDbI{
     _id: string
     createBy: string
     description: string

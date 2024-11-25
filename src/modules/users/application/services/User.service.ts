@@ -1,33 +1,29 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { UserRepository } from '../../domain/repositories/UserRepository';
 import { HashingService } from '../../domain/services/hashing.service.interface';
-import { IIdService } from '../../domain/interface/Id.interface';
-import { NewUserInterface } from '../../domain/interface/NewUserInterface';
-import { IdInterface } from '../../domain/interface/IdInterface';
-import { EmailInterface } from '../../domain/interface/EmailInterface';
 import { User } from '../../domain/entities/User.entities';
 import { UserResDto } from '../../presentation/dtos/UserRes.dto';
 import { PublicDataDto } from '../../presentation/dtos/PublicData.dto';
 import { PrivateDataDto } from '../../presentation/dtos/PrivateDataDto';
+import { IdDto } from 'src/modules/publications/presentation/dtos/IdDto';
+import { EmailDto } from '../../presentation/dtos/Email.dto';
+import { NewUserInterface } from '../../domain/interface/NewUserInterface';
+import { IdServiceI } from '../../domain/interface/IdServiceI';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject('UserRepository') private readonly userRepository: UserRepository,
     @Inject('HashingService') private readonly hashingService: HashingService,
-    @Inject('IdService') private readonly idService: IIdService
+    @Inject('IdService') private readonly idService: IdServiceI
   ) {}
   
   async createUser(data: NewUserInterface):Promise<UserResDto | null> {
     const password = await this.hashingService.hash(data.password)
     const newUser = {
+      ...data,
       _id: this.idService.generate(),
-      username: data.username,
-      email: data.email,
       password,
-      phonenumber: data.phonenumber,
-      age: data.age,
-      gender: data.gender,
       myPublications: [],
       myPublicationRequests: [],
       myPublicationMatches: [],
@@ -52,26 +48,25 @@ export class UserService {
     return usersResDto
   }
   
-  async getUserById({id}: IdInterface): Promise<UserResDto | null>{
+  async getUserById({id}: IdDto): Promise<UserResDto | null>{
     const user = await this.userRepository.getUserById(id)
     if(!user) return null
     return new UserResDto(user)
   }
   
-  async getUserByEmail({email}: EmailInterface): Promise<User | null>{
-    return await this.userRepository.getUserByEmail(email)
+  async getUserByEmail({email}: EmailDto): Promise<UserResDto | null>{
+    const user = await this.userRepository.getUserByEmail(email)
+    return new UserResDto(user)
   }
   
-  async getPublicData({id}: IdInterface): Promise<{} | null>{
+  async getPublicData({id}: IdDto): Promise<PublicDataDto | null>{
     const user = await this.userRepository.getUserById(id)
     const {username, age, gender} = user.getPublicData()
-    const publicDataDto = new PublicDataDto(username, age, gender)
-    return publicDataDto
+    return new PublicDataDto(username, age, gender)
   }
-  async getPrivateData({id}: IdInterface): Promise<{} | null>{
+  async getPrivateData({id}: IdDto): Promise<PrivateDataDto | null>{
     const user = await this.userRepository.getUserById(id)
     const {email, phonenumber} = user.getPrivateData()
-    const privateDataDto = new PrivateDataDto(email, phonenumber)
-    return privateDataDto
+    return new PrivateDataDto(email, phonenumber)
   }
 }

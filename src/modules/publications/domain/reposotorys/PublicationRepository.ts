@@ -1,9 +1,8 @@
 import { Publication } from "../entities/Publication";
-import { NewPublicationDbI } from "./NewPublicationDbI";
-import { NewPublicationI } from "./NewPublicationInterface";
+import { PublicationDbI } from "./PublicationDbI";
 
 export interface PublicationRepository {
-    createPublication(publication: NewPublicationDbI): Promise<Publication | null>
+    createPublication(publication: PublicationDbI): Promise<Publication | null>
     getPublicationById(id:string): Promise<Publication | null>
     getPublications(): Promise<Publication[] | null>
 }

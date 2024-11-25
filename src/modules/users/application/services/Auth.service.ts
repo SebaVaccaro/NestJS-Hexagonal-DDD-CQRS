@@ -3,21 +3,28 @@ import { HashingService } from "../../domain/interface/hashing.service.interface
 import { UserService } from "./User.service";
 import { JwtService } from "@nestjs/jwt";
 import { UserResDto } from "../../presentation/dtos/UserRes.dto";
-import { LoginInterface } from "../../domain/interface/Login.interface";
+import { LoginDto } from "../../presentation/dtos/Login.dto";
+import { EmailDto } from "../../presentation/dtos/Email.dto";
+import { User } from "../../domain/entities/User.entities";
+import { UserRepository } from "../../domain/repositories/UserRepository";
 
 @Injectable()
 export class AuthService{
     constructor(
         @Inject('HashingService') private readonly hashing: HashingService,
-        private readonly userService: UserService,
+        @Inject('UserRepository') private readonly userRepository: UserRepository,
         private readonly jwtService: JwtService
       ){}
     
-      async signIn({email, password}: LoginInterface): Promise<{access_token: string, user: UserResDto}> {
+      async getUserByEmail({email}: EmailDto): Promise<User>{
+            return await this.userRepository.getUserByEmail(email)
+      }
+
+      async signIn({email, password}: LoginDto): Promise<{access_token: string, user: UserResDto}> {
         
         if(!email) throw new HttpException("email is required", HttpStatus.BAD_REQUEST)
 
-        const user = await this.userService.getUserByEmail({email})
+        const user = await this.getUserByEmail({email})
         if(!user)throw new HttpException("email unexistend", HttpStatus.NOT_FOUND)
         
         const matchPassword = await this.hashing.compare( password, user?.password)

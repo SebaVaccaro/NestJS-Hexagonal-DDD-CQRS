@@ -1,14 +1,13 @@
 import { Inject } from "@nestjs/common";
-import { PublicationRepository } from "../domain/interfaces/PublicationRepository";
-import { NewPublicationI } from "../domain/interfaces/NewPublicationInterface";
 import { Publication } from "../domain/entities/Publication";
-import { IdServiceI } from "../domain/interfaces/IdServiceI";
-import { IdI } from "../domain/interfaces/IdI";
 import { PublicationResDto } from "../presentation/dtos/PublicationResDto";
-import { IdInterface } from "src/modules/users/domain/interface/IdInterface";
 import { User } from "src/modules/users/domain/entities/User.entities";
 import { UserRepository } from "../../users/domain/repositories/UserRepository";
 import { UserI } from "src/modules/users/domain/interface/UserI";
+import { IdDto } from "../presentation/dtos/IdDto";
+import { NewPublicationReqDto } from "../presentation/dtos/NewPublicationReqDto";
+import { IdServiceI } from "../domain/reposotorys/IdServiceI";
+import { PublicationRepository } from "../domain/reposotorys/PublicationRepository";
 
 export class PublicationService{
     constructor(
@@ -17,35 +16,51 @@ export class PublicationService{
         @Inject('UserRepository') private readonly userRepository: UserRepository
     ){}
 
-    async getUserById({id}: IdInterface): Promise<User | null>{
+    async getUserById({id}: IdDto): Promise<User | null>{
         const user = await this.userRepository.getUserById(id)
         if(!user) return null
         return user
     }
     async userSave(user:User): Promise<UserI | null>{
-        return await this.userRepository.userSave(user)
+        const userSave = await this.userRepository.userSave(user)
+        return userSave
     }
     
-    async createPublication({id}: IdI, newPublication: NewPublicationI): Promise<PublicationResDto | null>{
+    async createPublication({id}: IdDto, newPublication: NewPublicationReqDto): Promise<PublicationResDto | null>{
         const user = await this.getUserById({id})
         if(!user){
             console.log("no existe usuario")
             return null
         }
-        const publication = {...newPublication, _id: this.idService.generate(), createBy: id}
+        
+        const publication = {
+            ...newPublication,
+            _id: this.idService.generate(),
+            createBy: id,
+            requests: [],
+            matches: [],
+            publicData: user.getPublicData(),
+            privateData: user.getPrivateData() 
+        }
         const res = await this.publicationRespository.createPublication(publication)
+        
         user.myPublications.push(res._id)
-        console.log(res)
-        console.log(user)
         await this.userSave(user)
         return new PublicationResDto(res)
     }
 
-    async getPublications(): Promise<Publication[] | null>{
-        return await this.publicationRespository.getPublications()
+    async getPublications(): Promise<PublicationResDto[] | null>{
+        const publications = await this.publicationRespository.getPublications()
+        const publicationsResDto: Publication[] = []
+        publications.forEach(publication=>{
+            const publicationResDto = new PublicationResDto(publication)
+            publicationsResDto.push(publicationResDto)
+        }
+        )
+        return publicationsResDto
     }
 
-    async getPublicationById( {id}:IdI): Promise<PublicationResDto | null>{
+    async getPublicationById( {id}:IdDto): Promise<PublicationResDto | null>{
         const user = await this.publicationRespository.getPublicationById(id)
         return new PublicationResDto(user)
     }

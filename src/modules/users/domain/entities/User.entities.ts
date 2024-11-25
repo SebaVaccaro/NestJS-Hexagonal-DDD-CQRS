@@ -1,20 +1,35 @@
-export class User {
-    constructor(
-        public _id: string,
-        public username: string,
-        public email: string,
-        public password: string,
-        public phonenumber: string,
-        public age: string,
-        public gender: string,
-        public myPublications: string[] = [],
-        public myPublicationRequests: string[] = [],
-        public myPublicationMatches: string[] = [],
-        public myRequests: string[] = [],
-        public myMatches: string[] = []
-    ) {}
+import { UserI } from "../interface/UserI";
 
-    getPublicData() {
+export class User {
+    _id: string;
+    username: string;
+    email: string;
+    password: string;
+    phonenumber: string;
+    age: string;
+    gender: string;
+    myPublications: string[];
+    myPublicationRequests: string[];
+    myPublicationMatches: string[];
+    myRequests: string[];
+    myMatches: string[];
+
+    constructor(user: UserI) {
+        this._id = user._id;
+        this.username = user.username;
+        this.email = user.email;
+        this.password = user.password;
+        this.phonenumber = user.phonenumber;
+        this.age = user.age;
+        this.gender = user.gender;
+        this.myPublications = user.myPublications;
+        this.myPublicationRequests = user.myPublicationRequests;
+        this.myPublicationMatches = user.myPublicationMatches;
+        this.myRequests = user.myRequests;
+        this.myMatches = user.myMatches;
+    }
+
+    getPublicData = () => {
         return {
             username: this.username,
             age: this.age,
@@ -22,11 +37,10 @@ export class User {
         };
     }
 
-    getPrivateData() {
+    getPrivateData = () => {
         return {
             email: this.email,
             phonenumber: this.phonenumber
         };
     }
 }
-

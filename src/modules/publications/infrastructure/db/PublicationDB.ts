@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import { PublicationRepository } from "../../domain/interfaces/PublicationRepository";
 import { PublicationS } from "./PublicationSchema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Publication } from "../../domain/entities/Publication";
-import { NewPublicationDbI } from "../../domain/interfaces/NewPublicationDbI";
+import { PublicationDbI } from "../../domain/interfaces/PublicationDbI";
+import { PublicationRepository } from "../../domain/reposotorys/PublicationRepository";
 
 @Injectable()
 export class PublicationDB implements PublicationRepository{
     constructor(@InjectModel(PublicationS.name) private readonly publicationModel: Model<PublicationS>){}
     
-    async createPublication(publication: NewPublicationDbI): Promise<Publication | null> {
+    async createPublication(publication: PublicationDbI): Promise<Publication | null> {
         const newPublication = new this.publicationModel(publication)
         const res = await newPublication.save()
         return new Publication(res)

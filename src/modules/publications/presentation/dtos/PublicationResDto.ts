@@ -1,12 +1,13 @@
-import { Publication } from "../../domain/entities/Publication"
+import { PrivateDataI } from "../../domain/interfaces/PrivateDataI"
 import { PublicationResDtoI } from "../../domain/interfaces/PublicationResDtoI"
+import { PublicDataI } from "../../domain/interfaces/PublicDataI"
 
 export class PublicationResDto{
     _id: string
     createBy: string
     description: string
-    publicData: string[]
-    privateData: string[]
+    publicData: PublicDataI
+    privateData: PrivateDataI
     requests: string[]
     matches: string[]
     constructor(publication: PublicationResDtoI){
