@@ -11,7 +11,7 @@ export class UserController {
   @Post('/register')
   @UsePipes(new ValidationPipe({whitelist: true}))
   async userRegister(@Body() userData: NewUserDto): Promise<UserResDto>{
-    return await this.userService.createUser(userData)
+    return await this.userService.create(userData)
   }
 
   @Get('/publicdata/:id')
@@ -27,14 +27,14 @@ export class UserController {
   }
   
   @Get()
-  async getUsers(): Promise<UserResDto[]>{
-    return await this.userService.getUsers()
+  async getAll(): Promise<UserResDto[]>{
+    return await this.userService.getAll()
   }
   
   @Get('/:id')
   @UsePipes(new ValidationPipe({whitelist:true}))
-  async getUserById(@Param() id:UserIdDto): Promise<UserResDto>{
-    return await this.userService.getUserById(id)
+  async getById(@Param() id:UserIdDto): Promise<UserResDto>{
+    return await this.userService.getById(id)
   }
   
 }

@@ -6,6 +6,7 @@ import { PublicationModule } from './modules/publications/publication.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserService } from './modules/users/application/services/User.service';
 import { PublicationService } from './modules/publications/application/PublicationService';
+import { UserPublicationModule } from './modules/mediator/UserPublicationModule';
 
 @Module({
   providers:[
@@ -19,6 +20,7 @@ import { PublicationService } from './modules/publications/application/Publicati
     AuthModule,
     UserModule,
     PublicationModule,
+    UserPublicationModule,
     MongooseModule.forRoot(
       process.env.URI
     )

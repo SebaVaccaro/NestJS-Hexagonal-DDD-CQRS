@@ -18,7 +18,7 @@ export class UserService {
     @Inject('IdService') private readonly idService: IdServiceI
   ) {}
   
-  async createUser(data: NewUserInterface):Promise<UserResDto | null> {
+  async create(data: NewUserInterface):Promise<UserResDto | null> {
     const password = await this.hashingService.hash(data.password)
     const newUser = {
       ...data,
@@ -35,7 +35,7 @@ export class UserService {
     return new UserResDto(user)
   }
   
-  async getUsers(): Promise<UserResDto[]>{
+  async getAll(): Promise<UserResDto[]>{
     
     const users: User[] = await this.userRepository.getUsers()
     
@@ -48,13 +48,13 @@ export class UserService {
     return usersResDto
   }
   
-  async getUserById({id}: IdDto): Promise<UserResDto | null>{
+  async getById({id}: IdDto): Promise<UserResDto | null>{
     const user = await this.userRepository.getUserById(id)
     if(!user) return null
     return new UserResDto(user)
   }
   
-  async getUserByEmail({email}: EmailDto): Promise<UserResDto | null>{
+  async getByEmail({email}: EmailDto): Promise<UserResDto | null>{
     const user = await this.userRepository.getUserByEmail(email)
     return new UserResDto(user)
   }

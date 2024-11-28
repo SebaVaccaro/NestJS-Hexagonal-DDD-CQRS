@@ -10,18 +10,18 @@ import { PublicationRepository } from "../../domain/reposotorys/PublicationRepos
 export class PublicationDB implements PublicationRepository{
     constructor(@InjectModel(PublicationS.name) private readonly publicationModel: Model<PublicationS>){}
     
-    async createPublication(publication: PublicationDbI): Promise<Publication | null> {
+    async create(publication: PublicationDbI): Promise<Publication | null> {
         const newPublication = new this.publicationModel(publication)
         const res = await newPublication.save()
         return new Publication(res)
     }
 
-    async getPublicationById(id: string): Promise<Publication | null> {
+    async getById(id: string): Promise<Publication | null> {
         const resUser = await this.publicationModel.findById(id)
         return new Publication(resUser)
     }
 
-    async getPublications(): Promise<Publication[] | null> {
+    async getAll(): Promise<Publication[] | null> {
         const resUsers = await this.publicationModel.find()
         const users = []
         resUsers.map(resUser=>{
@@ -29,5 +29,14 @@ export class PublicationDB implements PublicationRepository{
             users.push(user)
         })
         return users
+    }
+
+    async delete(id: string): Promise<Publication | null>{
+        const res = await this.publicationModel.findByIdAndDelete(id)
+        return res
+    }
+
+    async update(data: Publication): Promise<Publication | null>{
+        return await this.publicationModel.findByIdAndUpdate(data._id, data, {new: true})
     }
 }

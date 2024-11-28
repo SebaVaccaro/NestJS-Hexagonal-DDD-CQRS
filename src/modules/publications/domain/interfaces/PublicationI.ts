@@ -1,12 +1,11 @@
-import { PrivateDataI } from "./PrivateDataI"
-import { PublicDataI } from "./PublicDataI"
+import { UserDataI } from "./UserDataI"
+
 
 export interface PublicationI{
     _id: string
     createBy: string
     description: string
-    publicData: PublicDataI
-    privateData: PrivateDataI
+    userData: UserDataI
     requests: string[]
     matches: string[]
 }

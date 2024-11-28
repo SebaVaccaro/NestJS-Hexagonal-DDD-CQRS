@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { HydratedDocument } from "mongoose";
-import { PublicDataI } from "../../domain/interfaces/PublicDataI";
-import { PrivateDataI } from "../../domain/interfaces/PrivateDataI";
+import { UserDataI } from "../../domain/interfaces/UserDataI";
 export type PublicationDocument = HydratedDocument<PublicationS>   
     
 @Schema()
@@ -15,11 +14,8 @@ export class PublicationS{
     @Prop({type:String})
     description: string
 
-    @Prop({type: Object})
-    publicData: PublicDataI
-    
-    @Prop({type: Object})
-    privateData: PrivateDataI
+    @Prop({type:Object})
+    userData: UserDataI
     
     @Prop({ type: [String], required: true })
     requests: string[]

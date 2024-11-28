@@ -1,37 +1,22 @@
 import { Inject } from "@nestjs/common";
 import { Publication } from "../domain/entities/Publication";
 import { PublicationResDto } from "../presentation/dtos/PublicationResDto";
-import { User } from "src/modules/users/domain/entities/User.entities";
-import { UserRepository } from "../../users/domain/repositories/UserRepository";
-import { UserI } from "src/modules/users/domain/interface/UserI";
 import { IdDto } from "../presentation/dtos/IdDto";
 import { NewPublicationReqDto } from "../presentation/dtos/NewPublicationReqDto";
 import { IdServiceI } from "../domain/reposotorys/IdServiceI";
 import { PublicationRepository } from "../domain/reposotorys/PublicationRepository";
+import { PublicPublicationProfileResDto } from "../presentation/dtos/PublicPublicationProfile.dto";
+import { PublicationReqDto } from "../presentation/dtos/PublicationReq.dto";
+import { MediatorService } from "../../mediator/UserPublication/MediatorService";
 
 export class PublicationService{
     constructor(
-        @Inject('PublicationRepository') private readonly publicationRespository: PublicationRepository,
+        @Inject('PublicationRepository') private readonly publicationRepository: PublicationRepository,
         @Inject('IdService') private readonly idService:IdServiceI,
-        @Inject('UserRepository') private readonly userRepository: UserRepository
+        private readonly mediatorService: MediatorService
     ){}
-
-    async getUserById({id}: IdDto): Promise<User | null>{
-        const user = await this.userRepository.getUserById(id)
-        if(!user) return null
-        return user
-    }
-    async userSave(user:User): Promise<UserI | null>{
-        const userSave = await this.userRepository.userSave(user)
-        return userSave
-    }
     
-    async createPublication({id}: IdDto, newPublication: NewPublicationReqDto): Promise<PublicationResDto | null>{
-        const user = await this.getUserById({id})
-        if(!user){
-            console.log("no existe usuario")
-            return null
-        }
+    async create({id}: IdDto, newPublication: NewPublicationReqDto): Promise<PublicationResDto | null>{
         
         const publication = {
             ...newPublication,
@@ -39,18 +24,13 @@ export class PublicationService{
             createBy: id,
             requests: [],
             matches: [],
-            publicData: user.getPublicData(),
-            privateData: user.getPrivateData() 
         }
-        const res = await this.publicationRespository.createPublication(publication)
-        
-        user.myPublications.push(res._id)
-        await this.userSave(user)
+        const res = await this.mediatorService.createPublication(publication, id)
         return new PublicationResDto(res)
     }
 
-    async getPublications(): Promise<PublicationResDto[] | null>{
-        const publications = await this.publicationRespository.getPublications()
+    async getAll(): Promise<PublicationResDto[] | null>{
+        const publications = await this.publicationRepository.getAll()
         const publicationsResDto: Publication[] = []
         publications.forEach(publication=>{
             const publicationResDto = new PublicationResDto(publication)
@@ -60,8 +40,23 @@ export class PublicationService{
         return publicationsResDto
     }
 
-    async getPublicationById( {id}:IdDto): Promise<PublicationResDto | null>{
-        const user = await this.publicationRespository.getPublicationById(id)
+    async getById( {id}:IdDto): Promise<PublicationResDto | null>{
+        const user = await this.publicationRepository.getById(id)
         return new PublicationResDto(user)
+    }
+
+    async getPublicProfile({id}:IdDto): Promise<PublicPublicationProfileResDto | null>{
+        const publication = await this.publicationRepository.getById(id)
+        return new PublicPublicationProfileResDto(publication)
+    }
+
+    async delete({id}:IdDto): Promise<PublicationResDto | null>{
+        return await this.publicationRepository.delete(id)
+    }
+
+    async update({id}: IdDto, data:PublicationReqDto): Promise<PublicationResDto | null>{
+        if(id !== data._id) return null
+        const publication = await this.publicationRepository.update(data)
+        return new PublicationResDto(publication)
     }
 }

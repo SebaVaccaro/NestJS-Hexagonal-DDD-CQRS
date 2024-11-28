@@ -1,8 +1,10 @@
-import { Publication } from "../entities/Publication";
-import { PublicationDbI } from "./PublicationDbI";
+import { Publication } from "../entities/Publication"
+import { PublicationDbI } from "../interfaces/PublicationDbI"
 
 export interface PublicationRepository {
-    createPublication(publication: PublicationDbI): Promise<Publication | null>
-    getPublicationById(id:string): Promise<Publication | null>
-    getPublications(): Promise<Publication[] | null>
+    create(publication: PublicationDbI): Promise<Publication | null>
+    getById(id:string): Promise<Publication | null>
+    getAll(): Promise<Publication[] | null>
+    delete(id: string): Promise<Publication | null>
+    update(data: Publication): Promise<Publication | null>
 }

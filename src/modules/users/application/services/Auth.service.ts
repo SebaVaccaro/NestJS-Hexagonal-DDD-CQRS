@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { HashingService } from "../../domain/interface/hashing.service.interface";
-import { UserService } from "./User.service";
 import { JwtService } from "@nestjs/jwt";
 import { UserResDto } from "../../presentation/dtos/UserRes.dto";
 import { LoginDto } from "../../presentation/dtos/Login.dto";
@@ -16,7 +15,7 @@ export class AuthService{
         private readonly jwtService: JwtService
       ){}
     
-      async getUserByEmail({email}: EmailDto): Promise<User>{
+      async getByEmail({email}: EmailDto): Promise<User>{
             return await this.userRepository.getUserByEmail(email)
       }
 
@@ -24,7 +23,7 @@ export class AuthService{
         
         if(!email) throw new HttpException("email is required", HttpStatus.BAD_REQUEST)
 
-        const user = await this.getUserByEmail({email})
+        const user = await this.getByEmail({email})
         if(!user)throw new HttpException("email unexistend", HttpStatus.NOT_FOUND)
         
         const matchPassword = await this.hashing.compare( password, user?.password)
